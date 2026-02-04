@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:1.29.1-alpine                                           # Imagen Docker a Utilizar.                                                                   
+    # ports:                                                             # Para ESTE caso (solo health + scheduling) NO hace falta publicar puertos.
+    #   - "80:80"
+    #   - "443:443"
+    logging:                                                             # Docker guarda los logs del contenedor (docker logs) y con esto evitamos que crezcan sin límite y llenen el disco.
+      driver: "json-file"
+      options:
+        max-size: "20m"                                                  # Limita el tamaño de cada archivo de log a 20 MB.
+        max-file: "5"                                                    # Mantiene hasta 5 archivos de logs rotados.
+
+    healthcheck:                                                         # Docker comprueba automáticamente que el contenedor está sano (Healthy)
+      test: ["CMD-SHELL", "wget -qO- http://localhost/ || exit 1"]       # Docker ejecuta esto DENTRO del contenedor.
+      interval: 15s                                                      # Docker ejecuta el healthcheck cada 15 segundos.
+      timeout: 3s                                                        # Si el comando tarda más de 3 segundos, se considera fallo.
+      retries: 5                                                         # Si falla 5 veces seguidas, Docker marca el contenedor como UNHEALTHY.
+      start_period: 30s                                                  # Durante los primeros 30 segundos desde el arranque: Los fallos NO cuentan.
+
+    deploy:
+      mode: global                                                       # Docker Swarm ejecutará 1 contenedor de ese servicio en cada nodo que cumpla las constraints
+
+      placement:
+        constraints:
+          - "node.labels.type == TEST"                                   # Swarm solo desplegará este servicio en nodos que tengan la etiqueta: TEST 
+
+      resources:
+        limits:
+          memory: 500M                                                   # Este contenedor no puede consumir más de 500 MB de RAM
+
+      update_config:                                                     # Define la política de “rolling update” de Docker Swarm.
+        parallelism: 1                                                   # Máximo de tareas (tasks) que Swarm actualizará simultáneamente (irá nodo por nodo, task por task).
+        order: stop-first                                                # Primero detiene la task antigua y después crea/arranca la nueva.
+        delay: 60s                                                       # Es el tiempo que Swarm espera antes de empezar a actualizar la siguiente task.
+        monitor: 60s                                                     # Define el periodo durante el cual Swarm vigila la nueva task tras arrancarla. Se usa junto con failure_action.                        
+        failure_action: rollback                                         # Si algo falla durante el proceso, revierte al estado anterior (rollback).
+
+      rollback_config:                                                   # Cómo Docker Swarm revierte un despliegue fallido.
+        parallelism: 1                                                   # Máximo de tareas (tasks) que Swarm actualizará simultáneamente (irá nodo por nodo, task por task).
+        order: stop-first                                                # Primero detiene la versión “mala”, luego arranca la versión anterior.
+        monitor: 60s                                                     # Define el tiempo que Swarm vigila cada task tras revertirla para verificar que el rollback está funcionando correctamente.
+        failure_action: pause                                            # Swarm detiene el proceso de rollback, sin continuar y sin seguir intentando revertir el resto de tasks.
+
+      restart_policy:                                                    # Cómo Docker Swarm debe reaccionar cuando una task (contenedor) de tu servicio muere, falla o se detiene.
+        condition: any                                                   # Swarm reiniciará la task en cualquier circunstancia.
+        delay: 5s                                                        # Después de cada reinicio, Swarm espera 5 segundos antes de volver a intentarlo.
+        max_attempts: 3                                                  # Si en 30s falla más de 3 veces → deja de reiniciar.
+        window: 30s                                                      # Si en 30s falla más de 3 veces → deja de reiniciar.
