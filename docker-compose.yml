@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   nginx:
-    image: nginx:1.29.4-alpine                                           # Imagen Docker a Utilizar.                                                                   
+    image: nginx:${NGINX_VERSION}                                        # Imagen Docker a Utilizar.                                                                   
     # ports:                                                             # Para ESTE caso (solo health + scheduling) NO hace falta publicar puertos.
     #   - "80:80"
     #   - "443:443"
@@ -24,11 +24,11 @@ services:
 
       placement:
         constraints:
-          - "node.labels.type == TEST"                                   # Swarm solo desplegará este servicio en nodos que tengan la etiqueta: TEST 
+          - "node.labels.type == ${NODE_TYPE}"                           # Swarm solo desplegará este servicio en nodos que tengan la etiqueta: TEST 
 
       resources:
         limits:
-          memory: 500M                                                   # Este contenedor no puede consumir más de 500 MB de RAM
+          memory: ${MEM_LIMIT}                                           # Este contenedor no puede consumir más de 500 MB de RAM
 
       update_config:                                                     # Define la política de “rolling update” de Docker Swarm.
         parallelism: 1                                                   # Máximo de tareas (tasks) que Swarm actualizará simultáneamente (irá nodo por nodo, task por task).
@@ -46,5 +46,5 @@ services:
       restart_policy:                                                    # Cómo Docker Swarm debe reaccionar cuando una task (contenedor) de tu servicio muere, falla o se detiene.
         condition: any                                                   # Swarm reiniciará la task en cualquier circunstancia.
         delay: 5s                                                        # Después de cada reinicio, Swarm espera 5 segundos antes de volver a intentarlo.
-        max_attempts: 3                                                  # Si en 30s falla más de 3 veces → deja de reiniciar.
+        max_attempts: ${RESTART_MAX_ATTEMPTS}                            # Si en 30s falla más de 3 veces → deja de reiniciar.
         window: 30s                                                      # Si en 30s falla más de 3 veces → deja de reiniciar.
