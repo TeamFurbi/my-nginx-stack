@@ -46,5 +46,5 @@ services:
       restart_policy:                                                    # Cómo Docker Swarm debe reaccionar cuando una task (contenedor) de tu servicio muere, falla o se detiene.
         condition: any                                                   # Swarm reiniciará la task en cualquier circunstancia.
         delay: 5s                                                        # Después de cada reinicio, Swarm espera 5 segundos antes de volver a intentarlo.
-        max_attempts: ${RESTART_MAX_ATTEMPTS}                            # Si en 30s falla más de 3 veces → deja de reiniciar.
+        max_attempts: 3                                                  # Si en 30s falla más de 3 veces → deja de reiniciar.
         window: 30s                                                      # Si en 30s falla más de 3 veces → deja de reiniciar.
