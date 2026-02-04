@@ -24,7 +24,7 @@ services:
 
       placement:
         constraints:
-          - "node.labels.type == TEST"                                   # Swarm solo desplegará este servicio en nodos que tengan la etiqueta: TEST 
+          - "node.labels.type == TEST"                                   # Docker Swarm solo desplegará este servicio en nodos que tengan la etiqueta: TEST 
 
       resources:
         limits:
@@ -41,10 +41,10 @@ services:
         parallelism: 1                                                   # Máximo de tareas (tasks) que Swarm actualizará simultáneamente (irá nodo por nodo, task por task).
         order: stop-first                                                # Primero detiene la versión “mala”, luego arranca la versión anterior.
         monitor: 60s                                                     # Define el tiempo que Swarm vigila cada task tras revertirla para verificar que el rollback está funcionando correctamente.
-        failure_action: pause                                            # Swarm detiene el proceso de rollback, sin continuar y sin seguir intentando revertir el resto de tasks.
+        failure_action: pause                                            # Docker Swarm detiene el proceso de rollback, sin continuar y sin seguir intentando revertir el resto de tasks.
 
       restart_policy:                                                    # Cómo Docker Swarm debe reaccionar cuando una task (contenedor) de tu servicio muere, falla o se detiene.
-        condition: any                                                   # Swarm reiniciará la task en cualquier circunstancia.
-        delay: 5s                                                        # Después de cada reinicio, Swarm espera 5 segundos antes de volver a intentarlo.
+        condition: any                                                   # Docker Swarm reiniciará la task en cualquier circunstancia.
+        delay: 5s                                                        # Después de cada reinicio, Docker Swarm espera 5 segundos antes de volver a intentarlo.
         max_attempts: 3                                                  # Si en 30s falla más de 3 veces → deja de reiniciar.
         window: 30s                                                      # Si en 30s falla más de 3 veces → deja de reiniciar.
