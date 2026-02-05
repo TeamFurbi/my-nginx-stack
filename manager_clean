@@ -1,0 +1,2 @@
+# Ajustar Swarm para que NO acumule basura, esto evita que Swarm mantenga un montón de tareas viejas. Ejecuta esto en un nodo manager:
+docker swarm update --task-history-limit 1
