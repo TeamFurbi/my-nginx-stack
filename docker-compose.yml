@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   nginx:
-    image: nginx:1.29.1-alpine                                           # Imagen Docker a Utilizar.                                                                   
+    image: nginx:${NGINX_VERSION}                                        # Imagen Docker a Utilizar.                                                                   
     # ports:                                                             # Para ESTE caso (solo health + scheduling) NO hace falta publicar puertos.
     #   - "80:80"
     #   - "443:443"
