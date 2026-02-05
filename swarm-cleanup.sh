@@ -17,3 +17,5 @@ docker image prune -a -f --filter "until=5m"
 
 #echo "[INFO] $(date -Is) - System prune (no volumes)"
 #docker system prune
+
+echo "[INFO] $(date -Is) - Done"
