@@ -5,7 +5,7 @@ Este repositorio contiene un stack Docker Swarm para desplegar Nginx utilizando 
 ## Archivos
 
 - `docker-compose.yml` → Manifiesto del stack Swarm.
-- `stack.env` → Variables utilizadas por el compose.
+- `.env` → Variables utilizadas por el compose, en este caso no se utiliza.
 - `configs/` (si se usa) → Archivos de configuración opcionales.
 
 ## Variables configurables (stack.env)
@@ -28,5 +28,5 @@ Portainer descargará el repo, leerá `stack.env` y desplegará el stack automá
 ## Cómo actualizar
 
 1. Cambiar variables o YAML en el repositorio.
-2. En Portainer → Stack → **Pull and redeploy**.
+2. En Portainer → Stack → **Pull and redeploy**. Ademas se ha definido en Portainer un mecanismo de "GitOps updates" de 5m, si el repositorio git difiere de lo que se almacenó localmente en el último git pull, se implementan los cambios.
 3. Swarm aplicará rolling update con rollback automático si falla.
