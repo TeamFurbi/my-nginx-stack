@@ -12,7 +12,7 @@ Este repositorio contiene un stack Docker Swarm para desplegar Nginx utilizando 
 
 - `NGINX_VERSION` → Versión de la imagen de Nginx.
 - `NODE_TYPE` → Label del nodo Swarm (`docker node update --label-add type=TEST <node>`).
-- `MEM_LIMIT` → Límite de memoria por contenedor.
+- `MEM_LIMIT` → Límite de memoria por contenedor (docker).
 - `RESTART_MAX_ATTEMPTS` → Intentos de reinicio antes de parar.
 
 ## Cómo usarlo con Portainer
