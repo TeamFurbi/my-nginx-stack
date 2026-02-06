@@ -6,7 +6,7 @@ Este repositorio contiene un stack Docker Swarm para desplegar Nginx utilizando 
 
 - `docker-compose.yml` → Manifiesto del stack Swarm.
 - `.env` → Variables utilizadas por el compose, en este caso no se utiliza.
-- `configs/` (si se usa) → Archivos de configuración opcionales.
+- `configs/` (si se usa) → Archivos de configuración opcionales para el docker.
 
 ## Variables configurables (stack.env)
 
