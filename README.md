@@ -29,4 +29,4 @@ Portainer descargará el repo, leerá `stack.env` y desplegará el stack automá
 
 1. Cambiar variables o YAML en el repositorio.
 2. En Portainer → Stack → **Pull and redeploy**. Ademas se ha definido en Portainer un mecanismo de "GitOps updates" de 5m, si el repositorio git difiere de lo que se almacenó localmente en el último git pull, se implementan los cambios.
-3. Swarm aplicará rolling update con rollback automático si falla.
+3. Swarm aplicará rolling update (de uno en uno) con rollback automático si falla.
