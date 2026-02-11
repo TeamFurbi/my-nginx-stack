@@ -7,7 +7,6 @@ docker container prune -f --filter "until=5m"
 echo "[INFO] $(date -Is) - Pruning unused images older than 5m/24h"
 docker image prune -a -f --filter "until=5m"
 
-
 # En un Swarm grande esto es sensato: system prune limpia varias cosas de golpe (incluye redes/build cache) y Docker lo presenta como una herramienta más “global” (menos granular).
 #echo "[INFO] $(date -Is) - Pruning unused networks"
 #docker network prune
